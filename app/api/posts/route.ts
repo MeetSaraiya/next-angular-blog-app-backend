@@ -4,32 +4,10 @@
 //     id?:any
 //   }
 
-import bcrypt from 'bcrypt';
 import pool from '@/app/utils/db';
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import { promises } from 'stream';
 import { error } from 'console';
-
-export async function verifyuser
-    (req: NextRequest): Promise<{ userId: string, username: string } | null> {
-    const authHeader = req.headers.get("authorization");
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return null;
-    }
-
-    const token = authHeader.slice(7);
-    try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET as string);
-        return payload as { userId: string, username: string }
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-
-    
-}
+import { verifyuser } from '@/app/utils/verify';
 
 export async function GET() {
     try {
@@ -68,6 +46,8 @@ export async function POST(req:NextRequest){
             { status: 500 });
     }
 }
+
+
 
 // export async function GET(req: NextRequest) {
 //     try { 

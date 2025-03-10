@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
                 status: 400
             });
         }
-        const password_hash = await bcrypt.hash(password, 10);
+        // const password_hash = await bcrypt.hash(password, 10);
         // const {id,p_h}
         const user = await pool.query("select id,password_hash from users where username=$1 ", [username]);
         // const { id, p_h} = user

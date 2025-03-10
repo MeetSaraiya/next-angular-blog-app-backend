@@ -1,10 +1,7 @@
-import bcrypt from 'bcrypt';
 import pool from '@/app/utils/db';
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import { promises } from 'stream';
 import { error } from 'console';
-import { verifyuser } from '../route';
+import { verifyuser } from '@/app/utils/verify';
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string } >}) {
     const user = await verifyuser(req);
@@ -14,7 +11,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     try {
         const { content } = await req.json();
         const {id}=await params ;
-        const result = await pool.query("update posts set content = $1 where id =$2 ", [ content, Number(id)]);
+        await pool.query("update posts set content = $1 where id =$2 ", [ content, Number(id)]);
 
         return NextResponse.json("post got updated");
     } catch {
@@ -36,7 +33,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
         const {id}=await params ;
 
         // const uid=user.userId || 9999;
-        const result = await pool.query("delete from posts where id =$1 ", [Number(id)]);
+        await pool.query("delete from posts where id =$1 ", [Number(id)]);
 
         return NextResponse.json("post got deleted");
     } catch {
