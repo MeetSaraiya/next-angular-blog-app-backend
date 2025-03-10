@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken';
 import { promises } from 'stream';
 import { error } from 'console';
 
-async function verifyuser
+export async function verifyuser
     (req: NextRequest): Promise<{ userId: string, username: string } | null> {
     const authHeader = req.headers.get("authorization");
 
@@ -33,7 +33,7 @@ async function verifyuser
 
 export async function GET() {
     try {
-        const result = await pool.query("              select id, title , content, user_id from posts ");
+        const result = await pool.query(" select id, title , content, user_id from posts ");
         return NextResponse.json(result.rows);
     } catch (error) {
         console.log(error);
@@ -47,7 +47,7 @@ export async function GET() {
 export async function POST(req:NextRequest){
     const user = await verifyuser(req);
     if(!user){
-        return NextResponse.json({message:"user not found , kindly do login again"},{status:401})
+        return NextResponse.json({message:"unauthorized user"},{status:401})
     }
     try{
         const {title,content} = await req.json();
@@ -55,7 +55,7 @@ export async function POST(req:NextRequest){
             return NextResponse.json({error:"title or content is missing"},{status:400});
         }
         // const uid=user.userId || 9999;
-        const result = await pool.query("insert into posts(title,content,user_id values($1,$2,$3) returning id,title,content,user_id ",[title,content,user.userId]);
+        const result = await pool.query("insert into posts(title,content,user_id) values($1,$2,$3) returning id, title, content, user_id",[title,content,user.userId]);
 
         const nextpost = result.rows[0];
 

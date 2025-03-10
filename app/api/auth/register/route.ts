@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({
                 message: "user inserted successfully"
             }, {
-                status:500
+                status:200
             });
 
         }

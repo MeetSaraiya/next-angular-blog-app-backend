@@ -33,7 +33,8 @@ export async function POST(req: NextRequest) {
                 expiresIn:'1h'
             })
             return NextResponse.json({
-                message: " user found "
+                message: " user found ",
+                token:token
             }, {
                 status: 200
             });
